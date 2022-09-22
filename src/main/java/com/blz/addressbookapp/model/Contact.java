@@ -1,7 +1,14 @@
 package com.blz.addressbookapp.model;
 
+import com.blz.addressbookapp.dto.ContactDTO;
+
 public class Contact {
     private String id;
+
+    public Contact(int i, ContactDTO contactDTO) {
+
+    }
+
     public String getId() {
         return id;
     }
