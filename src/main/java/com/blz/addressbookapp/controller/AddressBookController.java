@@ -21,7 +21,7 @@ public class AddressBookController {
     public ResponseEntity<ResponseDTO> getContactData() {
 
         Contact contact = new Contact(1,
-                new ContactDTO("Vignesh", "J", "Kanchipuram", "Tamilnadu", "631501", "8870855565"));
+                new ContactDTO("Vignesh", "J", "Tamilnadu", "Kanchipuram", "631501", "8870855565"));
         ResponseDTO response = new ResponseDTO("Get call success", contact);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
     }
