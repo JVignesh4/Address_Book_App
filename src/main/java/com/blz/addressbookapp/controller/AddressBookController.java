@@ -16,35 +16,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/addressbookservice")
 public class AddressBookController {
 
     @Autowired
-    private IAddressBookService addressbookservice;
+    private IAddressBookService iAddressBookService;
+
     @RequestMapping(value = {"", "/", "/get"})
     public ResponseEntity<ResponseDTO> getContactData() {
-
-        Contact contact = new Contact(1,
-                new ContactDTO("Vignesh", "J", "Tamilnadu", "Kanchipuram", "631501", "8870855565"));
-        ResponseDTO response = new ResponseDTO("Get call success", contact);
+        List<Contact> contactList = iAddressBookService.getContact();
+        ResponseDTO response = new ResponseDTO("Get call success", contactList);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
     }
 
 
     @GetMapping("/getContactDetails")
     public ResponseEntity<ResponseDTO> getContactData(@PathVariable("contactId") int contactId) {
-        Contact contact = new Contact(1,
-                new ContactDTO("Kishore", "Ramesh", "Tamilnadu", "Chennai", "600089", "987654320"));
+        Contact contact = iAddressBookService.getContactById(contactId);
         ResponseDTO response = new ResponseDTO("Get call success for id", contact);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 
     }
 
-
     @PostMapping("/addContactDetails")
     public ResponseEntity<ResponseDTO> addContactData(@RequestBody ContactDTO contactDTO) {
-        Contact contact = new Contact(1, contactDTO);
+        Contact contact = iAddressBookService.createContact(contactDTO);
         ResponseDTO response = new ResponseDTO("Created contact data for", contact);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 
@@ -61,6 +60,7 @@ public class AddressBookController {
 
     @DeleteMapping("/deleteContactDetails")
     public ResponseEntity<ResponseDTO> deleteContactData(@PathVariable("contactId") int contactId) {
+        iAddressBookService.deleteContact(contactId);
         ResponseDTO response = new ResponseDTO("Delete call success for id ", "deleted id:" + contactId);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 
