@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/addressbookservice")
 public class AddressBookController {
+
     @Autowired
     private IAddressBookService iAddressBookService;
 
@@ -45,10 +47,9 @@ public class AddressBookController {
         ResponseDTO response = new ResponseDTO("Created contact data for", contact);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
     }
-
     @PutMapping("/updateContactDetails")
     public ResponseEntity<ResponseDTO> updateContactData(@PathVariable("contactId") int contactId,
-                                                         @RequestBody ContactDTO contactDTO) {
+                                                         @Valid @RequestBody ContactDTO contactDTO) {
         Contact contact = iAddressBookService.updateContact(contactId, contactDTO);
         ResponseDTO response = new ResponseDTO("Updated contact data for", contact);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);

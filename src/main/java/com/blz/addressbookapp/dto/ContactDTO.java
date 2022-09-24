@@ -1,5 +1,5 @@
 package com.blz.addressbookapp.dto;
-
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
 public class ContactDTO {
