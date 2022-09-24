@@ -21,11 +21,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/addressbookservice")
 public class AddressBookController {
-
     @Autowired
     private IAddressBookService iAddressBookService;
 
-    @RequestMapping(value = {"", "/", "/get"})
+    @RequestMapping(value = { "", "/", "/get" })
     public ResponseEntity<ResponseDTO> getContactData() {
         List<Contact> contactList = iAddressBookService.getContact();
         ResponseDTO response = new ResponseDTO("Get call success", contactList);
@@ -40,19 +39,17 @@ public class AddressBookController {
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 
     }
-
     @PostMapping("/addContactDetails")
     public ResponseEntity<ResponseDTO> addContactData(@RequestBody ContactDTO contactDTO) {
         Contact contact = iAddressBookService.createContact(contactDTO);
         ResponseDTO response = new ResponseDTO("Created contact data for", contact);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
-
     }
 
     @PutMapping("/updateContactDetails")
     public ResponseEntity<ResponseDTO> updateContactData(@PathVariable("contactId") int contactId,
                                                          @RequestBody ContactDTO contactDTO) {
-        Contact contact = new Contact(1, contactDTO);
+        Contact contact = iAddressBookService.updateContact(contactId, contactDTO);
         ResponseDTO response = new ResponseDTO("Updated contact data for", contact);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 
