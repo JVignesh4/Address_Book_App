@@ -12,9 +12,9 @@ public class AddressBookAppApplication {
     public static void main(String[] args) {
         System.out.println("Welcome to Address Book !! ");
         ApplicationContext context = SpringApplication.run(AddressBookAppApplication.class, args);
-        log.info("Employee Payroll App Started in {} Environment",
+        log.info("Address Book App Started in {} Environment",
                 context.getEnvironment().getProperty("environment"));
-        log.info("Employee Payroll DB User is {} ",
+        log.info("Address Book App User is {} ",
                 context.getEnvironment().getProperty("spring.datasource.username"));
     }
 
