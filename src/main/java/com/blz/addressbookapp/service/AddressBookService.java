@@ -1,49 +1,51 @@
 package com.blz.addressbookapp.service;
 
 import com.blz.addressbookapp.dto.ContactDTO;
+import com.blz.addressbookapp.exception.AddressBookException;
 import com.blz.addressbookapp.model.Contact;
+import com.blz.addressbookapp.repository.AddressBookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class AddressBookService implements IAddressBookService {
-    List<Contact> contactList = new ArrayList<>();
+
+    private AddressBookRepository addressBookRepository;
+    //List<Contact> contactList = new ArrayList<>();
 
     @Override
     public List<Contact> getContact() {
 
-        return contactList;
+        return addressBookRepository.findAll();
     }
 
     @Override
     public Contact getContactById(int contactId) {
-        return contactList.get(contactId - 1);
+        return addressBookRepository.findById(contactId).orElseThrow(() -> new AddressBookException("Contact of the person "
+                + contactId + "doesn't Exist"));
     }
 
     @Override
     public Contact createContact(ContactDTO contactDTO) {
-        Contact contact = new Contact(contactList.size() + 1, contactDTO);
-        contactList.add(contact);
-        return contact;
+        Contact contact = null;
+        contact = new Contact(contactDTO);
+        log.debug("Person Details: " + contact.toString());
+        return addressBookRepository.save(contact);
     }
 
     @Override
     public Contact updateContact(int contactId, ContactDTO contactDTO) {
         Contact contact = this.getContactById(contactId);
-        contact.setFirstName(contactDTO.firstName);
-        contact.setLastName(contactDTO.lastName);
-        contact.setState(contactDTO.state);
-        contact.setCity(contactDTO.city);
-        contact.setZip(contactDTO.zip);
-        contact.setPhone(contactDTO.phone);
-        contactList.set(contactId - 1, contact);
-        return contact;
+        contact.updateContact(contactDTO);
+        return addressBookRepository.save(contact);
     }
 
     @Override
     public void deleteContact(int contactId) {
-        contactList.remove(contactId - 1);
+        Contact contact =this.getContactById(contactId);
+        addressBookRepository.delete(contact);
     }
 }

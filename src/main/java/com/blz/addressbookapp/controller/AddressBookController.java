@@ -2,9 +2,12 @@ package com.blz.addressbookapp.controller;
 
 import com.blz.addressbookapp.dto.ContactDTO;
 import com.blz.addressbookapp.dto.ResponseDTO;
+import com.blz.addressbookapp.jms.JMS;
 import com.blz.addressbookapp.model.Contact;
 import com.blz.addressbookapp.service.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,13 +31,14 @@ public class AddressBookController {
 
     @RequestMapping(value = { "", "/", "/get" })
     public ResponseEntity<ResponseDTO> getContactData() {
-        List<Contact> contactList = iAddressBookService.getContact();
+        List<Contact> contactList = null;
+        contactList = iAddressBookService.getContact();
         ResponseDTO response = new ResponseDTO("Get call success", contactList);
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
     }
 
 
-    @GetMapping("/getContactDetails")
+    @GetMapping("/getContactDetails/{contactId}")
     public ResponseEntity<ResponseDTO> getContactData(@PathVariable("contactId") int contactId) {
         Contact contact = iAddressBookService.getContactById(contactId);
         ResponseDTO response = new ResponseDTO("Get call success for id", contact);
@@ -63,4 +67,13 @@ public class AddressBookController {
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
 
     }
+
+    @Autowired
+    private JMS jms;
+
+    public void sendMail(){
+        jms.sendEmail("Vigneshjmax@gmail.com","This is AddressBook project", "This is test mail from Address Book project");
+    }
+
+
 }

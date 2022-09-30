@@ -1,12 +1,22 @@
 package com.blz.addressbookapp.model;
 
 import com.blz.addressbookapp.dto.ContactDTO;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "address_book")
 public class Contact {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "contactId")
     private int contactId;
     public String firstName;
     public String lastName;
-    public String state;
+    public String address;
     public String city;
+    public String state;
     public String zip;
     public String phone;
 
@@ -14,14 +24,31 @@ public class Contact {
         this.contactId = contactId;
         this.firstName = contactDTO.firstName;
         this.lastName = contactDTO.lastName;
-        this.state = contactDTO.state;
+        this.address=contactDTO.address;
         this.city = contactDTO.city;
+        this.state = contactDTO.state;
         this.zip = contactDTO.zip;
         this.phone = contactDTO.phone;
     }
 
+    public Contact() {
+
+    }
+
+    public Contact(ContactDTO contactDTO) {
+
+    }
+
     public int getContactId() {
         return contactId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setContactId(int contactId) {
@@ -76,4 +103,13 @@ public class Contact {
         this.phone = phone;
     }
 
+    public void updateContact(ContactDTO contactDTO) {
+        this.firstName=contactDTO.firstName;
+        this.lastName=contactDTO.lastName;
+        this.address=contactDTO.address;
+        this.city=contactDTO.city;
+        this.state=contactDTO.state;
+        this.zip=contactDTO.zip;
+        this.phone=contactDTO.phone;
+    }
 }
